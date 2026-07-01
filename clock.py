@@ -84,14 +84,22 @@ def draw():
     if now == alarm - 1:
         if int(date.milli_second / 200) % 2 == 0:
             water_color = color(250, 128, 114)
+            reverse_color = color(5, 127, 141)
         else:
             water_color = color(255, 220, 100)
+            reverse_color = color(0, 35, 155)
+
     elif alarm - 3 <= now < alarm - 1:
         water_color = color(250, 128, 114)
+        reverse_color = color(5, 127, 141)
+
     elif alarm - 10 <= now < alarm - 3:
         water_color = color(255, 220, 100)
+        reverse_color = color(0, 35, 155)
+
     else:
         water_color = color(120, 200, 255)
+        reverse_color = color(135, 55, 0)
 
     # 水
 
@@ -111,6 +119,8 @@ def draw():
 
     if elapsed_time < 0:
         elapsed_time += 24 * 3600
+
+    
 
     # アラーム到達
     if now_seconds >= alarm_seconds and not alarm_triggered:
@@ -146,17 +156,23 @@ def draw():
         )
 
         water_line.fill(water_color)
+
     # 時計外枠
     dial = Ellipse(CLOCK_X, CLOCK_Y, CLOCK_R * 2, CLOCK_R * 2)
     dial.noFill()
     dial.outlineFill(color(0, 0, 0))
 
 
-    # 数字
-    Text("12", CLOCK_X, 30)
-    Text("3", CLOCK_X + 170, CLOCK_Y)
-    Text("6", CLOCK_X, 370)
-    Text("9", CLOCK_X - 170, CLOCK_Y)
+    # 文字盤（1～12）
+    for i in range(13):
+        if i == 0:
+            continue
+        angle = math.radians(i * 30 - 90)
+
+        x = CLOCK_X + math.cos(angle) * 155
+        y = CLOCK_Y + math.sin(angle) * 155
+
+        Text(str(i), x, y)
 
     # アラーム表示
     alarm_text = Text(
@@ -167,16 +183,6 @@ def draw():
         320,
         390
     )
-
-
-    # 5分ごとの目盛り
-    for i in range(1, 12):
-        if i == 3 or i == 6 or i == 9:
-            continue
-
-        tick = Line(CLOCK_X, 20, CLOCK_X, 50, 2)
-        tick.setRotationCenter(CLOCK_X, CLOCK_Y)
-        tick.rotate(i * 360 / 12)
 
     # 1分ごとの目盛り
     for i in range(60):
@@ -198,10 +204,28 @@ def draw():
     draw_hand((m + s / 60) * 6, 1.0)
 
     # 秒針
-    byo = Line(CLOCK_X, CLOCK_Y, CLOCK_X, 30, 2)
-    byo.fill(color(237, 140, 114))
-    byo.setRotationCenter(CLOCK_X, CLOCK_Y)
-    byo.rotate(s * 6)
+    sec_angle = math.radians(s * 6 - 90)
+
+    length = 170
+    step = 3  # 小さくするほど滑らか
+
+    for i in range(0, length, step):
+
+        x1 = CLOCK_X + math.cos(sec_angle) * i
+        y1 = CLOCK_Y + math.sin(sec_angle) * i
+
+        x2 = CLOCK_X + math.cos(sec_angle) * (i + step)
+        y2 = CLOCK_Y + math.sin(sec_angle) * (i + step)
+
+        mid_y = (y1 + y2) / 2
+
+        if mid_y >= base_y:
+            col = reverse_color
+        else:
+            col = color(237, 140, 114)
+
+        seg = Line(x1, y1, x2, y2, 2)
+        seg.fill(col)
 
 
 if __name__ == "__main__":
