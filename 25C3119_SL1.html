@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>課題13-2</title>
+</head>
+<body>
+    <canvas id="sample" width="500" height="500" style="background-color:white;"></canvas>
+    <script>
+        var canvas = document.getElementById('sample');
+        var ctx = canvas.getContext('2d');
+
+        var centerX = 250; // キャンバスの中心X
+        var centerY = 250; // キャンバスの中心Y
+        var totalCircles = 180; // 描画する円の総数
+        var ringRadius = 100;   // 円の中心を配置する軌道の半径
+        var circleRadius = 90;  // 描画する1つ1つの円の半径
+
+        ctx.lineWidth = 1;
+
+        // 0度から360度までループを回して円を配置していく
+        for (var i = 0; i < totalCircles; i++) {
+            // 現在の角度（ラジアン）を計算
+            var angle = (i * 2 * Math.PI) / totalCircles;
+            
+            // 各円の中心座標を計算（中心の周りを回るように配置）
+            var x = centerX + ringRadius * Math.cos(angle);
+            var y = centerY + ringRadius * Math.sin(angle);
+
+            // HSLカラーモードで色相を0〜360まで滑らかに変化させる
+            var hue = Math.floor((i * 360) / totalCircles);
+            ctx.strokeStyle = "hsl(" + hue + ", 100%, 50%)";
+
+            // 円（円弧）を線描画
+            ctx.beginPath();
+            ctx.arc(x, y, circleRadius, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.closePath();
+        }
+    </script>
+</body>
+</html>

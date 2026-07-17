@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>課題13-3</title>
+</head>
+<body>
+    <canvas id="sample" width="400" height="400" style="background-color:#f0f0f0;"></canvas>
+    <script>
+        var canvas = document.getElementById('sample');
+        var ctx = canvas.getContext('2d');
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "black";
+
+        // 1. 頭のベース（青い大きな円）
+        ctx.beginPath();
+        ctx.fillStyle = "#0099e5";
+        ctx.arc(200, 200, 140, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+
+        // 2. 顔の白い部分（白い少し平らな円）
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.ellipse(200, 220, 115, 100, 0, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+
+        // 3. 左目（白い縦長楕円）
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.ellipse(165, 120, 20, 30, 0, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+
+        // 4. 右目（白い縦長楕円）
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.ellipse(205, 120, 20, 30, 0, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+
+        // 5. 黒目（左・右の小さな黒い縦長楕円）
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.ellipse(173, 125, 5, 10, 0, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.ellipse(197, 125, 5, 10, 0, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
+
+        // 6. 鼻（赤い丸と、鼻の下の縦線）
+        ctx.beginPath();
+        ctx.fillStyle = "#e50012";
+        ctx.arc(185, 155, 15, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+
+        // 鼻のハイライト（小さな白丸）
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.arc(180, 150, 4, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.closePath();
+
+        // 鼻の下の縦線
+        ctx.beginPath();
+        ctx.moveTo(185, 170);
+        ctx.lineTo(185, 260);
+        ctx.stroke();
+        ctx.closePath();
+
+        // 7. 口（大きな笑顔の半円）
+        ctx.beginPath();
+        ctx.arc(185, 170, 90, 0.1 * Math.PI, 0.9 * Math.PI, false);
+        ctx.stroke();
+        ctx.closePath();
+
+        // 8. ひげ（左右3本ずつ、ループ処理を応用した位置計算で複雑に描画）
+        var mustacheY = [190, 215, 240];
+        var mustacheAnglesLeft = [-0.15, 0, 0.15];
+        var mustacheAnglesRight = [0.15, 0, -0.15];
+
+        for(var i = 0; i < 3; i++) {
+            // 左側のひげ
+            ctx.beginPath();
+            ctx.moveTo(150, mustacheY[i]);
+            ctx.lineTo(60, mustacheY[i] + (mustacheAnglesLeft[i] * 50));
+            ctx.stroke();
+            ctx.closePath();
+
+            // 右側のひげ
+            ctx.beginPath();
+            ctx.moveTo(220, mustacheY[i]);
+            ctx.lineTo(310, mustacheY[i] + (mustacheAnglesRight[i] * 50));
+            ctx.stroke();
+            ctx.closePath();
+        }
+    </script>
+</body>
+</html>
